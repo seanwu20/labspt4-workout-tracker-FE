@@ -5,8 +5,6 @@ import { Link } from "react-router-dom";
 import liftQuestTitle from "../assets/images/LiftQuestTitle.png";
 import GearIcon from "../assets/icons/Gear.svg";
 import plus from "../assets/icons/Plus.svg";
-import PersonIcon from "../assets/icons/Person.svg";
-import Button from "../components/Button";
 
 const NavBar = props => {
 

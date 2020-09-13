@@ -61,15 +61,8 @@ const ExerciseWeightliftingForm = ({ set, setSet }) => {
                 required
               />
             </InputDiv>
-            {/* <input type='range'
-                               min='1'
-                               max={'1000'}
-                               name={`weight${idx}`}
-                               onChange={(e) => {
-                                   inputHandler(idx, e)
-                               }}
-                               value={setData[`weight${idx}`]}
-                        /> */}
+
+
             <InputDiv>
               <InputLabel>Unit: </InputLabel>
               <Select

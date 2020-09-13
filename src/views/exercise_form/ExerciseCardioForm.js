@@ -48,17 +48,6 @@ const ExerciseCardioForm = ({ set, setSet }) => {
               />
             </InputDiv>
 
-            {/* <input
-              type="range"
-              min="1"
-              max={"1000"}
-              name={`time${idx}`}
-              onChange={e => {
-                inputHandler(idx, e);
-              }}
-              value={setData[`time${idx}`]}
-            /> */}
-
             <InputDiv>
               <InputLabel>Unit: </InputLabel>
               <Select
@@ -88,16 +77,6 @@ const ExerciseCardioForm = ({ set, setSet }) => {
                 required
               />
             </InputDiv>
-            {/* <input
-              type="range"
-              min="1"
-              max={"1000"}
-              name={`distance${idx}`}
-              onChange={e => {
-                inputHandler(idx, e);
-              }}
-              value={setData[`distance${idx}`]}
-            /> */}
 
             <InputDiv>
               <InputLabel>Unit: </InputLabel>
