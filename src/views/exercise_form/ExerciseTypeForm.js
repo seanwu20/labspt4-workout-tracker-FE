@@ -5,7 +5,6 @@ import cardio from "../../assets/icons/Cardio.png";
 import { Link } from "react-router-dom";
 
 const ExerciseTypeForm = (props) => {
-  // Coming from the suggestedWorkouts
   useEffect(() => {
 
     if(props.location.state !== undefined){

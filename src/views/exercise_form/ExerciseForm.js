@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from "react";
 import ExerciseCardioForm from "./ExerciseCardioForm";
 import ExerciseWeightliftingForm from "./ExerciseWeightliftingForm";
-import DatePicker from "../DatePicker";
+import DatePicker from "./DatePicker";
 import styled from "styled-components";
-import {connect} from "react-redux";
 import axios from 'axios'
 
 
@@ -265,4 +264,4 @@ const mapStateToProps = state => {
 };
 
 
-export default connect(mapStateToProps, null)(ExerciseForm);
+export default ExerciseForm;
