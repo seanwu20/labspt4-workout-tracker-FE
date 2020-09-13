@@ -5,14 +5,14 @@ import "./Calendar.css";
 
  const Home = Home => {
     return (
-        <Container>  
+        <HomeDiv>  
             <Calendar/>
-        </Container>
+        </HomeDiv>
     )
  }
 
 
-const Container = styled.div`
+const HomeDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
