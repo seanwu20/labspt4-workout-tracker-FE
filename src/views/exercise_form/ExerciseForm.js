@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ExerciseCardioForm from "./ExerciseCardioForm";
 import ExerciseWeightliftingForm from "./ExerciseWeightliftingForm";
 import DatePicker from "./DatePicker";
 import styled from "styled-components";
-import { useContext } from 'react'
 import WorkoutDataContext from "../../global/WorkoutDataContext"
 
 const ExerciseForm = (props) => {
@@ -28,11 +27,15 @@ const ExerciseForm = (props) => {
 
   // Will submit data to somewhere
   const submitHandler = e => {
-
     e.preventDefault()
-    workoutContext.setWorkoutData([...workoutContext.workoutData, { set, date, name }])
-    props.history.push('/')
 
+    if (edit) {
+      // implement later, will need to use index from database
+    }
+    else {
+      workoutContext.setWorkoutData([...workoutContext.workoutData, { set, date, name, exerciseType }])
+    }
+    props.history.push('/')
   };
 
 
@@ -40,6 +43,15 @@ const ExerciseForm = (props) => {
   const [edit, setEdit] = useState(false)
 
 
+  // on startup, check new exercise/edit exercise
+  useEffect(() => {
+    if (props.location.state) {
+      setSet(props.location.state.set)
+      setName(props.location.state.name)
+      setDate(props.location.state.date)
+      setEdit(true)
+    }
+  }, [props.location.state])
 
   return (
     <Container>
@@ -173,11 +185,6 @@ const Text = styled.h3`
 
 const Form = styled.form``;
 
-const mapStateToProps = state => {
-  return {
-    exerciseData: state.exerciseData
-  }
-};
 
 
 export default ExerciseForm;

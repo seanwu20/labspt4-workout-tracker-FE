@@ -6,9 +6,9 @@ const ExerciseCardioForm = ({ set, setSet }) => {
     e.preventDefault();
     let newData = {};
     newData[`time`] = 0;
-    newData[`time_units`] = "sec";
+    newData[`time_unit`] = "sec";
     newData[`distance`] = 0;
-    newData[`distance_units`] = "m";
+    newData[`distance_unit`] = "m";
 
     setSet([...set, newData]);
   };

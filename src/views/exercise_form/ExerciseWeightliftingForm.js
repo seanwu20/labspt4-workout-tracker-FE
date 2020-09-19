@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const ExerciseWeightliftingForm = ({ set, setSet }) => {
@@ -7,7 +7,7 @@ const ExerciseWeightliftingForm = ({ set, setSet }) => {
     e.preventDefault();
     let newData = {};
     newData[`weight`] = 0;
-    newData[`weight_units`] = "lbs";
+    newData[`weight_unit`] = "lbs";
     newData[`reps`] = 0;
     setSet([...set, newData]);
   };

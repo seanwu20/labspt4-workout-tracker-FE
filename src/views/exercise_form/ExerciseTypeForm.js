@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import weight from "../../assets/icons/Weightlifting.png";
 import cardio from "../../assets/icons/Cardio.png";
 import { Link } from "react-router-dom";
 
-const ExerciseTypeForm = (props) => {
+const ExerciseTypeForm = () => {
 
   const onSubmitHandler = event => {
     event.preventDefault();
