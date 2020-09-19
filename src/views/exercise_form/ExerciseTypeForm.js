@@ -1,21 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import weight from "../../assets/icons/Weightlifting.png";
 import cardio from "../../assets/icons/Cardio.png";
 import { Link } from "react-router-dom";
 
-const ExerciseTypeForm = (props) => {
-  useEffect(() => {
+const ExerciseTypeForm = () => {
 
-    if(props.location.state !== undefined){
-      const { exerciseName } = props.location.state;
-      setExerciseName(`${exerciseName}`)
-    }
-
-  }, [])
-
-  const [ExerciseName, setExerciseName] = useState("");
-  console.log(ExerciseName)
   const onSubmitHandler = event => {
     event.preventDefault();
   };
@@ -24,7 +14,7 @@ const ExerciseTypeForm = (props) => {
       <Div>
         <Form onSubmit={onSubmitHandler}>
           <Header>What Type of Exercise?</Header>
-          <Link to={{pathname: "/exercise-form/weightlifting", state: {exerciseName: ExerciseName}}}>
+          <Link to={{pathname: "/exercise-form/weightlifting"}}>
             <Button value="weightlifting">
               <Div>
                 <img src={weight} alt="weight" />
@@ -32,7 +22,7 @@ const ExerciseTypeForm = (props) => {
               Weightlifting
             </Button>
           </Link>
-          <Link to={{pathname: "/exercise-form/cardio", state: {exerciseName: ExerciseName}}}>
+          <Link to={{pathname: "/exercise-form/cardio"}}>
             <Button value="cardio">
               <Div>
                 <img src={cardio} alt="cardio" />

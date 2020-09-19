@@ -1,173 +1,101 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ExerciseCardioForm from "./ExerciseCardioForm";
 import ExerciseWeightliftingForm from "./ExerciseWeightliftingForm";
 import DatePicker from "./DatePicker";
 import styled from "styled-components";
-import axios from 'axios'
-
+import WorkoutDataContext from "../../global/WorkoutDataContext"
 
 const ExerciseForm = (props) => {
-    //exercise info
-    const [name, setName] = useState("");
-    const [date, setDate] = useState(new Date());
-    const [completed, setCompleted] = useState(false);
-    const exerciseType = props.match.params.exercise
-    
-    useEffect(() => {
-
-        if(props.location.state !== undefined){
-            const { exerciseName } = props.location.state;
-            setName(`${exerciseName}`)
-        }
-
-    }, [])
-
-    //set info
-    const [set, setSet] = useState(() => {
-        if (props.location.workout) {
-            return [props.location.workout.set]
-        } else {
-            return []
-        }
-    });
-
-    //Event handler functions
-    const backHandler = event => {
-        event.preventDefault();
-        props.history.push('/exercise-form')
-    };
-
-    const submitHandler = e => {
-        e.preventDefault();
-        const user_id = localStorage.getItem('user_id');
-        let newSet = [...set]
-        for (let i = 0; i < newSet.length; i++) {
-            if (newSet[i]['distance_units'] === 'm') newSet[i]['distance_units'] = 6
-            if (newSet[i]['distance_units'] === 'km') newSet[i]['distance_units'] = 7
-            if (newSet[i]['weight_units'] === 'lbs') newSet[i]['weight_units'] = 1
-            if (newSet[i]['weight_units'] === 'kg') newSet[i]['weight_units'] = 2
-            if (newSet[i]['time_units'] === 'sec') newSet[i]['time_units'] = 3
-            if (newSet[i]['time_units'] === 'min') newSet[i]['time_units'] = 4
-            if (newSet[i]['time_units'] === 'hours') newSet[i]['time_units'] = 5
-        }
-
-        const get_date = (dateObject) => {
-            const date = dateObject
-            const year = date.getFullYear()
-            const month = date.getMonth()+1 < 10 ? `0${date.getMonth()+1}` : date.getMonth()+1
-            const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
-            return `${year}-${month}-${day}`
-        }
+  //exercise info
+  const [name, setName] = useState("");
+  const [date, setDate] = useState(new Date());
+  const exerciseType = props.match.params.exercise
 
 
-        const newExercise = {name, date: get_date(date), sets: newSet, completed, workout_type: exerciseType, user_id};
-        if (edit === true) {
-            axios.put(`https://workouttrackerprod.herokuapp.com/api/exercises`, newExercise)
-        } else {
-            axios.post('https://workouttrackerprod.herokuapp.com/api/exercises', newExercise)
-                .then(res => 
-                    props.history.push('/Landing')
-                )
-                .catch(err => console.log(err))
-        }
-    };
 
-    const [InitialName, setInitialName] = useState([]);
-
-    const [editWorkout, setEditWorkout] = useState(props.workout)
-
-    const [edit, setEdit] = useState(false)
+  //set data
+  const [set, setSet] = useState([]);
 
 
-    const [unitIndex, setUnitIndex] = useState([])
-    React.useEffect(() => {
+  //Event handler functions
+  const backHandler = event => {
+    event.preventDefault();
+    props.history.push('/exercise-form')
+  };
 
-        axios.get('https://workouttrackerprod.herokuapp.com/api/units')
-            .then(res => setUnitIndex(res.data))
-            .catch(err => console.log(err))
+  const workoutContext = useContext(WorkoutDataContext)
 
-        // Update the document title using the browser API
-        // console.log(props.location.workout)
-        const autocomplete = () => {
-            axios
-                .get(`https://workouttrackerprod.herokuapp.com/api/exercises`)
-                .then(res => {
-                    let resData = res.data;
-                    let filtered = [];
-                    for (let i in resData) {
-                        filtered.push(resData[i].name);
-                    }
-                    setInitialName(filtered);
-                });
-        }
+  // Will submit data to somewhere
+  const submitHandler = e => {
+    e.preventDefault()
 
-        if (props.location.workout) {
-            autocomplete()
-            setName(props.location.workout.name)
-            setSet(props.location.workout.set)
-            setEdit(true)
-        } else {
-            autocomplete()
-        }
-    }, []);
+    if (edit) {
+      // implement later, will need to use index from database
+    }
+    else {
+      workoutContext.setWorkoutData([...workoutContext.workoutData, { set, date, name, exerciseType }])
+    }
+    props.history.push('/')
+  };
 
-    return (
-        <Container>
-            <Form onSubmit={submitHandler}>
-                <ButtonDiv>
-                    <BackInput type="button" value="< Back" onClick={backHandler}/>
 
-                    <SubmitInput type="submit"/>
-                </ButtonDiv>
+  // Used to keep track of new exercise or new exercise
+  const [edit, setEdit] = useState(false)
 
-                <Header>NAME OF EXERCISE:</Header>
 
-                <Div>
-                    <ExerciseInput
-                        type="text"
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                        required
-                        list="whatever"
-                    />
-                    <datalist id="whatever">
-                        {
-                            InitialName.map(filtered => {
-                                return (
-                                    <option value={filtered}></option>
-                                )
-                            })
-                        }
-                    </datalist>
-                </Div>
+  // on startup, check new exercise/edit exercise
+  useEffect(() => {
+    if (props.location.state) {
+      setSet(props.location.state.set)
+      setName(props.location.state.name)
+      setDate(props.location.state.date)
+      setEdit(true)
+    }
+  }, [props.location.state])
 
-                <DateDiv>
-                    <Text>Date</Text>
-                    <DatePicker date={date} setDate={setDate}/>
-                </DateDiv>
+  return (
+    <Container>
+      <Form onSubmit={submitHandler}>
+        <ButtonDiv>
+          <BackInput type="button" value="< Back" onClick={backHandler} />
 
-                <Div>
-                    {exerciseType === "cardio" ?
-                        <ExerciseCardioForm
-                            submitHandler={submitHandler}
-                            set={set}
-                            setSet={setSet}
-                        />
-                        :
-                        <ExerciseWeightliftingForm
-                            submitHandler={submitHandler}
-                            set={set}
-                            setSet={setSet}
-                        />
-                    }
-                </Div>
-                Completed? <input type='checkbox' onChange={(e) => {
-                if (e.target.checked === true) setCompleted(true)
-                else if (e.target.checked === false) setCompleted(false)
-            }}/>
-            </Form>
-        </Container>
-    );
+          <SubmitInput type="submit" />
+        </ButtonDiv>
+
+        <Header>NAME OF EXERCISE:</Header>
+
+        <Div>
+          <ExerciseInput
+            type="text"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            required
+          />
+        </Div>
+
+        <DateDiv>
+          <Text>Date</Text>
+          <DatePicker date={date} setDate={setDate} />
+        </DateDiv>
+
+        <Div>
+          {exerciseType === "cardio" ?
+            <ExerciseCardioForm
+              submitHandler={submitHandler}
+              set={set}
+              setSet={setSet}
+            />
+            :
+            <ExerciseWeightliftingForm
+              submitHandler={submitHandler}
+              set={set}
+              setSet={setSet}
+            />
+          }
+        </Div>
+      </Form>
+    </Container>
+  );
 };
 
 
@@ -257,11 +185,6 @@ const Text = styled.h3`
 
 const Form = styled.form``;
 
-const mapStateToProps = state => {
-    return {
-        exerciseData: state.exerciseData
-    }
-};
 
 
 export default ExerciseForm;
