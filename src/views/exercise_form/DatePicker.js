@@ -6,14 +6,10 @@ const DatePicker = ({ date, setDate }) => {
   const onChangeHandler = date => {
     setDate(date);
   };
-  /*    onChange = date => {
-        console.log(typeof date);
-        this.setState({date});
-    };*/
 
   return (
     <DateTimePicker
-      disableClock="false"
+      disableClock={false}
       onChange={onChangeHandler}
       value={date}
       defaultValue={date}

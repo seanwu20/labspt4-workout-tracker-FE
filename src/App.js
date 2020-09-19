@@ -5,21 +5,26 @@ import ExerciseTypeForm from "./views/exercise_form/ExerciseTypeForm"
 import ExerciseForm from "./views/exercise_form/ExerciseForm"
 import GlobalStyle from "./global/GlobalStyle"
 import NavBar from "./components/NavBar";
+import { useState } from 'react'
+import WorkoutDataContext from './global/WorkoutDataContext'
 
 
-function App() {
 
+const App = () => {
+
+  const [workoutData, setWorkoutData] = useState([])
 
 
   return (
     <div className="App">
       <BrowserRouter>
-          <GlobalStyle/>
-          <NavBar/>
-          <Route exact path="/" render={(props) => <Home {...props} />}/>
+        <GlobalStyle />
+        <NavBar />
+        <WorkoutDataContext.Provider value={{ workoutData, setWorkoutData }}>
+          <Route exact path="/" render={ props => <Home {...props} workoutData={workoutData} />} />
           <Route exact path="/exercise-form" render={(props) => <ExerciseTypeForm {...props} />} />
           <Route exact path="/exercise-form/:exercise" render={(props) => <ExerciseForm {...props} />} />
-      
+        </WorkoutDataContext.Provider>
       </BrowserRouter>
     </div>
   );

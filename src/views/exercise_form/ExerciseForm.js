@@ -1,85 +1,89 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import ExerciseCardioForm from "./ExerciseCardioForm";
 import ExerciseWeightliftingForm from "./ExerciseWeightliftingForm";
 import DatePicker from "./DatePicker";
 import styled from "styled-components";
-import axios from 'axios'
-
+import { useContext } from 'react'
+import WorkoutDataContext from "../../global/WorkoutDataContext"
 
 const ExerciseForm = (props) => {
-    //exercise info
-    const [name, setName] = useState("");
-    const [date, setDate] = useState(new Date());
-    const exerciseType = props.match.params.exercise
-    
-
-
-    //set data
-    const [set, setSet] = useState(() => []);
-
-
-    //Event handler functions
-    const backHandler = event => {
-        event.preventDefault();
-        props.history.push('/exercise-form')
-    };
-
-
-    // Will submit data to somewhere
-    const submitHandler = e => {
-
-    };
-
-
-    // Used to keep track of new exercise or new exercise
-    const [edit, setEdit] = useState(false)
+  //exercise info
+  const [name, setName] = useState("");
+  const [date, setDate] = useState(new Date());
+  const exerciseType = props.match.params.exercise
 
 
 
-    return (
-        <Container>
-            <Form onSubmit={submitHandler}>
-                <ButtonDiv>
-                    <BackInput type="button" value="< Back" onClick={backHandler}/>
+  //set data
+  const [set, setSet] = useState([]);
 
-                    <SubmitInput type="submit"/>
-                </ButtonDiv>
 
-                <Header>NAME OF EXERCISE:</Header>
+  //Event handler functions
+  const backHandler = event => {
+    event.preventDefault();
+    props.history.push('/exercise-form')
+  };
 
-                <Div>
-                    <ExerciseInput
-                        type="text"
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                        required
-                        list="whatever"
-                    />
-                </Div>
+  const workoutContext = useContext(WorkoutDataContext)
 
-                <DateDiv>
-                    <Text>Date</Text>
-                    <DatePicker date={date} setDate={setDate}/>
-                </DateDiv>
+  // Will submit data to somewhere
+  const submitHandler = e => {
 
-                <Div>
-                    {exerciseType === "cardio" ?
-                        <ExerciseCardioForm
-                            submitHandler={submitHandler}
-                            set={set}
-                            setSet={setSet}
-                        />
-                        :
-                        <ExerciseWeightliftingForm
-                            submitHandler={submitHandler}
-                            set={set}
-                            setSet={setSet}
-                        />
-                    }
-                </Div>
-            </Form>
-        </Container>
-    );
+    e.preventDefault()
+    workoutContext.setWorkoutData([...workoutContext.workoutData, { set, date, name }])
+    props.history.push('/')
+
+  };
+
+
+  // Used to keep track of new exercise or new exercise
+  const [edit, setEdit] = useState(false)
+
+
+
+  return (
+    <Container>
+      <Form onSubmit={submitHandler}>
+        <ButtonDiv>
+          <BackInput type="button" value="< Back" onClick={backHandler} />
+
+          <SubmitInput type="submit" />
+        </ButtonDiv>
+
+        <Header>NAME OF EXERCISE:</Header>
+
+        <Div>
+          <ExerciseInput
+            type="text"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            required
+          />
+        </Div>
+
+        <DateDiv>
+          <Text>Date</Text>
+          <DatePicker date={date} setDate={setDate} />
+        </DateDiv>
+
+        <Div>
+          {exerciseType === "cardio" ?
+            <ExerciseCardioForm
+              submitHandler={submitHandler}
+              set={set}
+              setSet={setSet}
+            />
+            :
+            <ExerciseWeightliftingForm
+              submitHandler={submitHandler}
+              set={set}
+              setSet={setSet}
+            />
+          }
+        </Div>
+      </Form>
+    </Container>
+  );
 };
 
 
@@ -170,9 +174,9 @@ const Text = styled.h3`
 const Form = styled.form``;
 
 const mapStateToProps = state => {
-    return {
-        exerciseData: state.exerciseData
-    }
+  return {
+    exerciseData: state.exerciseData
+  }
 };
 
 
